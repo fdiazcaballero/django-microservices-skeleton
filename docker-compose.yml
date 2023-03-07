@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app/:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=hello_world
+      - POSTGRES_PASSWORD=hello_world
+      - POSTGRES_DB=hello_world_dev
+
+
+# To persist the data beyond the life of the container we configured a volume. 
+# This config will bind postgres_data to the "/var/lib/postgresql/data/" directory in the container.
+volumes:
+  postgres_data:
